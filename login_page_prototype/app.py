@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-import socket
+import socket, Database, time
 from functools import wraps
 
 
@@ -26,9 +26,21 @@ def login_required(f):
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-
     global username
-    return render_template('hello.html', username = username)
+    if request.method == 'GET':
+        notes = Database.get_notes_by_username(username)
+        return render_template('hello.html', username = username, notes = notes)
+    if request.method == 'POST':
+        
+        if(request.form.get('update')) == 'add':
+            new_note = request.form['new_note']
+            Database.add_note_by_user(username, new_note)
+        else:
+            note_to_delete = request.form.get('id')
+            Database.delete_note_by_id(note_to_delete)
+
+        notes = Database.get_notes_by_username(username)
+        return render_template('hello.html', username = username, notes = notes)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,10 +66,17 @@ def login():
 def register():
     error = None
     if request.method == 'POST':
-        add_user(request.form['username'], request.form['password'])
-        return redirect (url_for('login'))
+        username = request.form['username']
+        check = Database.check_if_user_exist(username)
 
-    return render_template('register.html')
+        if not check:
+            add_user(username, request.form['password'])
+            return redirect (url_for('login'))
+        else:
+            error = "such user already exist"
+
+
+    return render_template('register.html', error=error)
 
 @app.route('/logout')
 @login_required
@@ -68,24 +87,11 @@ def logout():
 
 
 def check_for_valid_user(username, password):
-    logged = False
-    f = open('users.txt', 'r')
-    for line in f:
-        try:
-            pair = line.split()
-            valid_username =  pair[0]
-            valid_password = pair[2]
-            if username == valid_username and password == valid_password:
-                logged = True
-        except Exception, e:
-            print ''
-        
-    return logged
+    return Database.check_login(username, password)
+
 
 def add_user(username, password):
-    string_to_add = "\n" + username + " - " + password
-    with open("users.txt", "a") as f:
-        f.write(string_to_add)
+    Database.add_user(username, password)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3141, debug=True)

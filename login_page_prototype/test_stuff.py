@@ -1,8 +1,5 @@
-f = open('users.txt', 'r')
-for line in f:
-        pair = line.split()
-        user =  pair[0]
-        password = pair[2]
+import sqlite3, os, Database
 
-with open("users.txt", "a") as f:
-     f.write("\nnew line")
+# Database.add_user()
+
+print Database.get_max_id("note_id","notes")
