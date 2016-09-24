@@ -6,7 +6,7 @@
 	</head>
 	<body>
 			<div class="container">
-				<h1>Please login</h1>
+				<h1>Please login:</h1>
 				<br>
 				<form action="" method="post">
 					<input type="text" placeholder="Username" name="username" value="{{request.form.username}}">
@@ -17,6 +17,7 @@
 				<p class="error"><strong>Error:</strong> {{error}}</p>
 			{% endif %}
 			<p> Click <a href="/register">here</a> to register.</p>
+			<p> Click <a href="/test_stuff">here</a> to go test shit.</p>
 		</div>
 	</body>
 </html>

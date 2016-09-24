@@ -9,7 +9,7 @@ username = ''
 
 app = Flask(__name__)
 
-app.secret_key = "your_mom"
+app.secret_key = "your_moms"
 
 
 def login_required(f):
@@ -20,7 +20,6 @@ def login_required(f):
         else:
             return redirect(url_for('login'))
     return wrap
-
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -41,6 +40,11 @@ def index():
 
         notes = Database.get_notes_by_username(username)
         return render_template('hello.html', username = username, notes = notes)
+
+
+@app.route('/test_stuff', methods=['GET', 'POST'])
+def test_stuff():
+    return render_template('test_stuff.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
