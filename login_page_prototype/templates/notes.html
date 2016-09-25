@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>CS160 prototype</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    </head>
+    <body>
+        <h3>Hello {{username}}</h3>
+        <h4>add your notes here</h4>
+        {% for note in notes %}
+        	<form action="" method="post">
+					<input class="btn btn-default" type="submit" value="delete note">
+					{{note[2]}} 
+					<input type=hidden name=update value=delete>
+					<input type=hidden name=id value={{note[3]}}>
+			</form>
+        {% endfor %}
+
+
+        	<form action="" method="post">
+        			<input type=hidden name=update value=add>
+					<input type="text" placeholder="type here" name="new_note">
+					<input class="btn btn-default" type="submit" value="Add new note">
+			</form>
+
+	   	<p> Click <a href="/">here</a> to return to menu.</p>
+	   	<p> Click <a href="/logout">here</a> to logout.</p>
+    </body>
+</html>
