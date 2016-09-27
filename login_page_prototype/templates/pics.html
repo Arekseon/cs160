@@ -7,13 +7,20 @@
         <h3>Hello {{username}}</h3>
         <h4>add your pics here</h4>
 
-<!-- 
-        	<form action="" method="post">
-        			<input type=hidden name=update value=add>
-					<input type="text" placeholder="type here" name="new_note">
-					<input class="btn btn-default" type="submit" value="Add new note">
-			</form>
- -->
+
+        {% for pic in pics %}
+            <form action="" method="post">
+                    <input class="btn btn-default" type="submit" value="delete pic">
+
+                    <img src="{{pic[2]}}" alt="Mountain View" style="width:304px;height:228px;">
+                    
+                    <input type=hidden name=update value=delete>
+                    <input type=hidden name=id value={{pic[3]}}>
+            </form>
+        {% endfor %}
+ 
+
+
                   <form action="" method="post" enctype="multipart/form-data">
                     <input type="file" name="file"><br /><br />
                     <input type="submit" value="Upload">

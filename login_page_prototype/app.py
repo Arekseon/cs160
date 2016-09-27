@@ -144,6 +144,10 @@ def uploaded_file(filename):
 @login_required
 def pics():
     if request.method == 'POST':
+        if(request.form.get('update')) == 'delete':
+            pic_to_delete = request.form.get('id')
+            Database.delete_pic_by_id(pic_to_delete)
+
         if 'file' not in request.files:
             flash('No file part')
             print "###################1"
@@ -153,14 +157,17 @@ def pics():
         # submit a empty part without filename
         if file.filename == '':
             flash('No selected file')
-            print "###################2"
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print(filepath)
+            Database.add_pic_by_user(username, filepath)
             # return redirect(url_for('pics',
             #                         filename=filename))
-    return render_template('pics.html', username = username)
+    pics = Database.get_pics_by_username(username)
+    return render_template('pics.html', username = username, pics = pics)
 
 
 def check_for_valid_user(username, password):

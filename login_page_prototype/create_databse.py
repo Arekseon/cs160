@@ -16,5 +16,8 @@ c.execute('''CREATE TABLE USERS
 c.execute('''CREATE TABLE NOTES
              (time text, user_id int, note text, note_id int)''')
 
+c.execute('''CREATE TABLE PICS
+             (time text, user_id int, pic_address text, pic_id int)''')
+
 
 conn.commit()
